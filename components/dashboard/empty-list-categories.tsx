@@ -4,7 +4,7 @@ import React from "react";
 export default function EmptyList({
   description = "No se encontraron resultados",
 }: {
-  description: string;
+  description?: string;
 }) {
   return (
     <div className="py-10 px-2 text-slate-400">

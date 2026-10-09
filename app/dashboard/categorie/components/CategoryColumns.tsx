@@ -47,7 +47,7 @@ export function createCategoryColumns({
             isIconOnly
             size="sm"
             variant="light"
-            onPress={() => onEdit(category.id)}
+            onPress={() => onEdit?.(category.id)}
           >
             <Edit size={16} />
           </Button>
@@ -57,7 +57,7 @@ export function createCategoryColumns({
             size="sm"
             color="danger"
             variant="light"
-            onPress={() => onDelete(category.id)}
+            onPress={() => onDelete?.(category.id)}
           >
             <Trash2 size={16} />
           </Button>
