@@ -1,11 +1,8 @@
 "use client";
 import { ContentBox } from "@/components/setting-option";
 import { useProductForm } from "../hooks/useProductForm";
-import {
-  Brand,
-  Category,
+import type {
   ProductFormData,
-  Subcategory,
 } from "../types/product";
 import ProductBasicInfo from "./ProductBasicInfo";
 import ProductImages from "./ProductImages";
@@ -14,18 +11,12 @@ import ProductExpirationLots from "./ProductExpirationLots";
 import { Button } from "@heroui/react";
 import { Save } from "lucide-react";
 interface Props {
-  initialData: Partial<ProductFormData>;
-  categories: Category[];
-  subcategories: Subcategory[];
-  brands: Brand[];
-  onSubmit: (data: ProductFormData) => Promise<void>;
+  initialData?: Partial<ProductFormData>;
+  onSubmit?: (data: ProductFormData) => Promise<void>;
   onCancel?: () => void;
 }
 export default function ProductForm({
   initialData,
-  categories,
-  subcategories,
-  onSubmit,
   onCancel,
 }: Props) {
   const {
@@ -37,20 +28,22 @@ export default function ProductForm({
     addLot,
     updateLot,
     removeLot,
+    categories,
+    brands,
     totalLotStock,
+    onSubmit
   } = useProductForm(initialData);
   const isEditing = Boolean(form.id);
   const stockMismatch =
     form.hasExpiration && totalLotStock !== form.initialStock;
-  const handleSubmit = async () => {
-    await onSubmit(form);
-  };
   return (
-    <form>
+    <form onSubmit={onSubmit}>
       <ProductBasicInfo
         name={form.name}
         description={form.description}
         model={form.model}
+        categories={categories}
+        brands={brands}
         brandId={form.brandId}
         categoryId={form.categoryId}
         subcategoryId={form.subcategoryId}
@@ -65,6 +58,7 @@ export default function ProductForm({
         <ProductPricing
           salePrice={form.salePrice}
           initialStock={form.initialStock}
+          minimunStock={form.minimunStock}
           hasExpiration={form.hasExpiration}
           wholesalePrice={form.wholesalePrice}
           purchasePrice={form.purchasePrice}
@@ -107,7 +101,7 @@ export default function ProductForm({
           color="primary"
           startContent={<Save size={18} />}
           isDisabled={stockMismatch}
-          onPress={handleSubmit}
+          type="submit"
         >
           {isEditing ? "Guardar cambios" : "Crear producto"}
         </Button>
